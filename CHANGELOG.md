@@ -7,13 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
+## [0.2.2] - 2025-04-29
+
+### Fixed
 
 - Compatible with meaningless input: Merging 0 or 1 dimensions will not change the layout;
 
 ### Added
 
 - Add `to_inline_size` function, to copy data from `ArrayLayout<N>` into `ArrayLayout<M>`;
+- Complete documentation and testing;
 
 ## [0.2.1] - 2025-03-28
 
@@ -36,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix merging dims with length 1;
 
-[Unreleased]: https://github.com/InfiniTensor/ndarray-layout/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/InfiniTensor/ndarray-layout/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/InfiniTensor/ndarray-layout/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/InfiniTensor/ndarray-layout/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/InfiniTensor/ndarray-layout/releases/tag/v0.2.0

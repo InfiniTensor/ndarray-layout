@@ -4,7 +4,7 @@
 [![Latest version](https://img.shields.io/crates/v/ndarray-layout.svg)](https://crates.io/crates/ndarray-layout)
 [![Documentation](https://docs.rs/ndarray-layout/badge.svg)](https://docs.rs/ndarray-layout)
 [![license](https://img.shields.io/github/license/InfiniTensor/ndarray-layout)](https://mit-license.org/)
-[![codecov](https://codecov.io/github/Simon25772/ndarray-layout/branch/ShenghuSu/graph/badge.svg)](https://codecov.io/github/Simon25772/ndarray-layout/tree/Shenghu)
+[![codecov](https://codecov.io/github/InfiniTensor/ndarray-layout/branch/main/graph/badge.svg)](https://codecov.io/github/InfiniTensor/ndarray-layout)
 ![GitHub repo size](https://img.shields.io/github/repo-size/InfiniTensor/ndarray-layout)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/InfiniTensor/ndarray-layout)
 
@@ -13,7 +13,7 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/InfiniTensor/ndarray-layout)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/InfiniTensor/ndarray-layout)
 
-*ndarray-layout* 是一个用于处理多维数组布局的 *Rust* 库，它提供了 `ArrayLayout` 结构体，用于高效管理和操作多维数组的元信息，如形状、步长和偏移量等。这个库在处理多维数组时，提供了灵活且高效的布局管理方式，能够满足不同场景下对数组布局的操作需求。
+*ndarray-layout* 是一个用于处理多维数组布局的 crate，它提供了 `ArrayLayout` 结构体，用于高效管理和操作多维数组的元信息，如形状、步长和偏移量等。这个库在处理多维数组时，提供了灵活且高效的布局管理方式，能够满足不同场景下对数组布局的操作需求。
 
 ## 主要功能特点
 
