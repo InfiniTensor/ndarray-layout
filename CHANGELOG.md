@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Compatible with meaningless input: Merging 0 or 1 dimensions will not change the layout;
+
 ### Added
 
-- Add `to_inline_size` function, to copy data from `ArrayLayout<N>` into `ArrayLayout<M>`.
+- Add `to_inline_size` function, to copy data from `ArrayLayout<N>` into `ArrayLayout<M>`;
 
 ## [0.2.1] - 2025-03-28
 

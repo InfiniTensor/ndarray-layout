@@ -112,4 +112,7 @@ fn test() {
 
     let tensor = Tensor(tensor.0.tile_be(0, &[2, 3]).tile_be(2, &[5, 2]));
     println!("{}", tensor);
+
+    let tensor = Tensor(ArrayLayout::<4>::with_ndim(0));
+    println!("{}", tensor);
 }

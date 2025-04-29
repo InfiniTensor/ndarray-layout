@@ -51,3 +51,17 @@ impl<const N: usize> Iterator for Split<'_, N> {
         })
     }
 }
+
+#[test]
+fn test_split() {
+    let layout = ArrayLayout::<3>::new(&[2, 3, 4], &[12, 4, 1], 0);
+    let mut splits = layout.split(2, &[1, 3]);
+    let layout = splits.next().unwrap();
+    assert_eq!(layout.shape(), &[2, 3, 1]);
+    assert_eq!(layout.strides(), &[12, 4, 1]);
+    assert_eq!(layout.offset(), 0);
+    let layout = splits.next().unwrap();
+    assert_eq!(layout.shape(), &[2, 3, 3]);
+    assert_eq!(layout.strides(), &[12, 4, 1]);
+    assert_eq!(layout.offset(), 1);
+}

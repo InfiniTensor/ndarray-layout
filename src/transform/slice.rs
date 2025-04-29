@@ -93,3 +93,39 @@ impl<const N: usize> ArrayLayout<N> {
         ans
     }
 }
+
+#[test]
+fn test_slice() {
+    let layout = ArrayLayout::<3>::new(&[2, 3, 4], &[12, 4, 1], 0).slice(1, 2, -1, 2);
+    assert_eq!(layout.shape(), &[2, 2, 4]);
+    assert_eq!(layout.strides(), &[12, -4, 1]);
+    assert_eq!(layout.offset(), 8);
+
+    let layout = ArrayLayout::<3>::new(&[2, 3, 4], &[12, 4, 1], 0).slice(1, 2, 0, 2);
+    assert_eq!(layout.shape(), &[2, 2, 4]);
+    assert_eq!(layout.strides(), &[12, 0, 1]);
+    assert_eq!(layout.offset(), 8);
+
+    let layout = ArrayLayout::<3>::new(&[2, 3, 4], &[12, 4, 1], 0).slice(1, 0, 1, 2);
+    assert_eq!(layout.shape(), &[2, 2, 4]);
+    assert_eq!(layout.strides(), &[12, 4, 1]);
+    assert_eq!(layout.offset(), 0);
+
+    let layout = ArrayLayout::<3>::new(&[2, 3, 4], &[12, 4, 1], 0).slice_many(&[
+        SliceArg {
+            axis: 1,
+            start: 0,
+            step: 1,
+            len: 2,
+        },
+        SliceArg {
+            axis: 2,
+            start: 0,
+            step: 1,
+            len: 4,
+        },
+    ]);
+    assert_eq!(layout.shape(), &[2, 2, 4]);
+    assert_eq!(layout.strides(), &[12, 4, 1]);
+    assert_eq!(layout.offset(), 0);
+}

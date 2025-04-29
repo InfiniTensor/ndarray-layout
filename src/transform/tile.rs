@@ -127,3 +127,46 @@ impl<const N: usize> ArrayLayout<N> {
         ans
     }
 }
+
+#[test]
+fn test_tile_be() {
+    let layout = ArrayLayout::<3>::new(&[2, 3, 6], &[18, 6, 1], 0).tile_be(2, &[2, 3]);
+    assert_eq!(layout.shape(), &[2, 3, 2, 3]);
+    assert_eq!(layout.strides(), &[18, 6, 3, 1]);
+    assert_eq!(layout.offset(), 0);
+}
+
+#[test]
+fn test_tile_le() {
+    let layout = ArrayLayout::<3>::new(&[2, 3, 6], &[18, 6, 1], 0).tile_le(2, &[2, 3]);
+    assert_eq!(layout.shape(), &[2, 3, 2, 3]);
+    assert_eq!(layout.strides(), &[18, 6, 1, 2]);
+    assert_eq!(layout.offset(), 0);
+}
+
+#[test]
+fn test_empty_tile() {
+    let layout = ArrayLayout::<3>::new(&[2, 3, 6], &[18, 6, 1], 0).tile_many(&[]);
+    assert_eq!(layout.shape(), &[2, 3, 6]);
+    assert_eq!(layout.strides(), &[18, 6, 1]);
+    assert_eq!(layout.offset(), 0);
+}
+
+#[test]
+fn test_multiple_tiles() {
+    let layout = ArrayLayout::<3>::new(&[2, 3, 6], &[18, 6, 1], 0).tile_many(&[
+        TileArg {
+            axis: 0,
+            endian: Endian::BigEndian,
+            tiles: &[2, 1],
+        },
+        TileArg {
+            axis: 2,
+            endian: Endian::BigEndian,
+            tiles: &[2, 3],
+        },
+    ]);
+    assert_eq!(layout.shape(), &[2, 1, 3, 2, 3]);
+    assert_eq!(layout.strides(), &[18, 18, 6, 3, 1]);
+    assert_eq!(layout.offset(), 0);
+}

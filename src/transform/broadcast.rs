@@ -1,6 +1,6 @@
 ﻿use crate::ArrayLayout;
 
-/// 索引变换参数。
+/// 广播变换参数。
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct BroadcastArg {
     /// 广播的轴。
@@ -34,4 +34,12 @@ impl<const N: usize> ArrayLayout<N> {
         }
         ans
     }
+}
+
+#[test]
+fn test_broadcast() {
+    let layout = ArrayLayout::<3>::new(&[1, 5, 2], &[10, 2, 1], 0).broadcast(0, 10);
+    assert_eq!(layout.shape(), &[10, 5, 2]);
+    assert_eq!(layout.strides(), &[0, 2, 1]);
+    assert_eq!(layout.offset(), 0);
 }

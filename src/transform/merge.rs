@@ -76,7 +76,11 @@ impl<const N: usize> ArrayLayout<N> {
         let shape = content.shape();
         let strides = content.strides();
 
-        let merged = args.iter().map(|arg| arg.len).sum::<usize>();
+        let merged = args.iter().map(|arg| arg.len.max(1)).sum::<usize>();
+        if merged == args.len() {
+            return Some(self.clone());
+        }
+
         let mut ans = Self::with_ndim(self.ndim + args.len() - merged);
 
         let mut content = ans.content_mut();
@@ -93,7 +97,7 @@ impl<const N: usize> ArrayLayout<N> {
             let &MergeArg { start, len, endian } = arg;
             let end = start + len;
 
-            if len == 0 {
+            if len < 2 {
                 continue;
             }
 
@@ -109,6 +113,9 @@ impl<const N: usize> ArrayLayout<N> {
                     _ => pairs.push((d, s)),
                 }
             }
+
+            last_end = end;
+
             if pairs.is_empty() {
                 push(1, 0);
                 continue;
@@ -131,7 +138,6 @@ impl<const N: usize> ArrayLayout<N> {
             }
 
             push(d, *s);
-            last_end = end;
         }
         for j in last_end..shape.len() {
             push(shape[j], strides[j]);
@@ -142,11 +148,67 @@ impl<const N: usize> ArrayLayout<N> {
 }
 
 #[test]
-fn test_merge() {
+fn test_merge_return_none() {
+    let layout = ArrayLayout::<3>::new(&[16, 4, 2], &[8, 4, 1], 0).merge_be(0, 3);
+    assert!(layout.is_none());
+}
+
+#[test]
+fn test_merge_pairs_empyt() {
+    let layout = ArrayLayout::<3>::new(&[1, 1, 1], &[1, 1, 1], 0)
+        .merge_be(0, 2)
+        .unwrap();
+    assert_eq!(layout.shape(), &[1, 1]);
+    assert_eq!(layout.strides(), &[0, 1]);
+    assert_eq!(layout.offset(), 0);
+}
+
+#[test]
+fn test_merge_be_example() {
     let layout = ArrayLayout::<3>::new(&[16, 1, 4], &[16, 768, 4], 0)
         .merge_be(0, 2)
         .unwrap();
     assert_eq!(layout.shape(), &[16, 4]);
     assert_eq!(layout.strides(), &[16, 4]);
     assert_eq!(layout.offset(), 0);
+}
+
+#[test]
+fn test_merge_le_example() {
+    let layout = ArrayLayout::<3>::new(&[4, 3, 2], &[1, 4, 12], 0);
+    let merged_layout = layout.merge_le(0, 3).unwrap();
+
+    assert_eq!(merged_layout.shape(), &[24]);
+    assert_eq!(merged_layout.strides(), &[1]);
+    assert_eq!(merged_layout.offset(), 0);
+}
+
+#[test]
+fn test_merge_len_zero() {
+    let layout = ArrayLayout::<3>::new(&[4, 3, 2], &[1, 4, 12], 0);
+    let merged_layout = layout.merge_le(0, 0).unwrap();
+
+    assert_eq!(merged_layout.shape(), &[4, 3, 2]);
+    assert_eq!(merged_layout.strides(), &[1, 4, 12]);
+    assert_eq!(merged_layout.offset(), 0);
+}
+
+#[test]
+fn test_partial_merge() {
+    let layout = ArrayLayout::<4>::new(&[2, 3, 4, 5], &[60, 20, 5, 1], 0);
+    let merged_layout = layout.merge_be(1, 2).unwrap();
+
+    assert_eq!(merged_layout.shape(), &[2, 12, 5]);
+    assert_eq!(merged_layout.strides(), &[60, 5, 1]);
+    assert_eq!(merged_layout.offset(), 0);
+}
+
+#[test]
+fn test_merge_free_example() {
+    let layout = ArrayLayout::<3>::new(&[3, 2, 4], &[4, 12, 1], 0);
+    let merged_layout = layout.merge_free(0, 3).unwrap();
+
+    assert_eq!(merged_layout.shape(), &[24]);
+    assert_eq!(merged_layout.strides(), &[1]);
+    assert_eq!(merged_layout.offset(), 0);
 }

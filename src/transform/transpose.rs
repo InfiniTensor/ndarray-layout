@@ -41,3 +41,16 @@ impl<const N: usize> ArrayLayout<N> {
         ans
     }
 }
+
+#[test]
+fn test_transpose() {
+    let layout = ArrayLayout::<3>::new(&[2, 3, 4], &[12, 4, 1], 0).transpose(&[1, 0]);
+    assert_eq!(layout.shape(), &[3, 2, 4]);
+    assert_eq!(layout.strides(), &[4, 12, 1]);
+    assert_eq!(layout.offset(), 0);
+
+    let layout = ArrayLayout::<3>::new(&[2, 3, 4], &[12, 4, 1], 0).transpose(&[2, 0]);
+    assert_eq!(layout.shape(), &[4, 3, 2]);
+    assert_eq!(layout.strides(), &[1, 4, 12]);
+    assert_eq!(layout.offset(), 0);
+}
